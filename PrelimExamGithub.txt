@@ -1,0 +1,49 @@
+
+-Prelim Exam 08-29-2025
+---
+- name: Prelim Exam Ansible Playbook
+  hosts: managed_nodes
+  become: yes
+  vars_files:
+    - config.yaml
+
+  tasks:
+    - name: Install latest Python3 and pip3
+      package:
+        name:
+          - python3
+          - python3-pip
+        state: latest
+      tags: python_install
+
+    - name: Set pip3 as default pip
+      alternatives:
+        name: pip
+        path: /usr/bin/pip3
+      tags: pip_default
+
+    - name: Set python3 as default python
+      alternatives:
+        name: python
+        path: /usr/bin/python3
+      tags: python_default
+
+    - name: Install Java OpenJDK
+      package:
+      package:
+        name: java-11-openjdk-devel
+        state: present
+      tags: java_install
+
+    - name: Install MariaDB Server
+      package:
+        name: mariadb-server
+        state: present
+      tags: mariadb_install
+
+    - name: Start MariaDB service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+      tags: mariadb_start
